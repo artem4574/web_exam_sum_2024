@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-3 text-center text-uppercase font-weight-bold">Модерация рецензии</h2>
+    <h3 class="my-3 text-center font-weight-bold">{{ user }}: Оценка {{ rating }}</h3>
+    <h4 class="my-2 text-center">{{ text | safe }}</h4>
+</div>
+
+<div class="text-center my-5">
+    <a class="btn btn-primary mx-3" href="{{ url_for('aprove', review_id=review_id) }}">Одобрить</a>
+    <a class="btn btn-danger mx-3" href="{{ url_for('reject', review_id=review_id) }}">Отклонить</a>
+</div>
+{% endblock %}

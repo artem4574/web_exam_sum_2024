@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2 class="my-3 text-center text-uppercase font-weight-bold">Рецензия "{{ book.name }}"</h2>
+
+    <form method="POST">
+        <div class="mb-3 d-flex flex-column flex-grow-1">
+            <label for="review">Текст отзыва:</label>
+            <textarea class="form-control flex-grow-1" name="review" id="review" cols="30" rows="5"></textarea>
+            <script>
+                const easyMDE = new EasyMDE();
+            </script>
+        </div>
+        <div class="mb-3 form-group">
+            <label for="exampleFormControlSelect1">Ваша оценка</label>
+            <select class="form-control" id="exampleFormControlSelect1" name="mark">
+                <option value="5">Отлично</option>
+                <option value="4">Хорошо</option>
+                <option value="3">Удовлетворительно</option>
+                <option value="2">Неудовлетворительно</option>
+                <option value="1">Плохо</option>
+                <option value="0">Ужасно</option>
+            </select>
+        </div>
+        <div class="mb-3 text-center">
+            <input type="submit" class="btn btn-primary" value="Сохранить отзыв">
+        </div>
+    </form>
+</div>
+
+{% endblock %}

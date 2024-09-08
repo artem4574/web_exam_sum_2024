@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% from 'pagination.html' import render_pagination %}
+
+{% block content %}
+<div class="container">
+    <div class="my-5">
+        <h2 class="mb-3 text-center text-uppercase font-weight-bold">Каталог книг</h2>
+        <div class="d-flex">
+            <form class="mb-5 mt-3 me-5" method="GET" style="min-width: 200px;">
+                <div class="mb-3">
+                    <input class="form-control" type="text" name="name" id="title" value="{{ name or '' }}" placeholder="Название книги">
+                </div>
+                <div class="mb-3">
+                    <select class="form-select" name="genre_id" id="genre_id">
+                        <option value="" disabled selected hidden>Жанр</option>
+                        {% for genre in genres %}
+                        <option {% if genre.id in genres_list %}selected{% endif %} value="{{ genre.id }}">{{ genre.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <select class="form-select" name="year" id="year">
+                        <option value="" disabled selected hidden>Год издания</option>
+                        {% for year in years %}
+                        <option {% if year in years_list %}selected{% endif %} value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <input class="form-control" name="amount_from" type="number" id="amount_from" value="{{ amount_from or '' }}" placeholder="От страниц">
+                </div>
+                <div class="mb-3">
+                    <input class="form-control" name="amount_to" type="number" id="amount_to" value="{{ amount_to or '' }}" placeholder="До страниц">
+                </div>
+                <div class="mb-3">
+                    <input class="form-control" type="text" name="author" id="author" value="{{ author or '' }}" placeholder="Автор">
+                </div>
+                <div class="my-3 align-self-center">
+                    <button type="submit" class="btn btn-secondary w-100 mt-auto">Найти</button>
+                </div>
+            </form>
+
+            <div class="book-list flex-grow-1">
+                {% if flag %}
+                <div class="courses-list container-fluid mt-3 mb-3">
+                    {% for book in books %}
+                        <div class="row p-3 border rounded mb-3">
+                            <div class="col-md-3 mb-2 mb-md-0 d-flex align-items-center justify-content-center">
+                                <img src="{{ url_for('image', cover_id=book.cover_id) }}" style=" width: 100%;
+                                    height: 100%; background-repeat: no-repeat; background-position: center; background-size: cover;">
+                            </div>
+                            <div class="col-md-9 align-items-center">
+                                <div class="d-flex">
+                                    <h4 class="text-uppercase">{{ book.name }}</h4>
+                                    <p class="ms-auto rating">
+                                        <span>★</span> <span>{{ "%.2f" | format(book.rating) }}</span>
+                                    </p>
+                                </div>
+                                <p class="text-muted my-3">{{ book.author.full_name }}</p>
+                                <p class="book-description">{{ book.description | truncate(200) }}</p>
+                                <p>{{ book.year }}</p>
+                                <p>{{ book.reviews|length }}</p>
+                                <p>
+                                    {% for genre in book_genres %}
+                                    {% if genre.books_id == book.id %}{{ genre.genre.name }}{% endif %}
+                                    {% endfor %}
+                                </p>
+                                <div class="btn-group">
+                                    <a class="btn btn-dark" href="{{ url_for('book.show', book_id=book.id) }}">Просмотр</a>
+                                    {% if current_user.is_authenticated %}
+                                    {% if current_user.can('edit') %}
+                                    <a class="btn btn-dark" href="{{ url_for('book.edit', book_id=book.id) }}">Редактирование</a>
+                                    {% endif %}
+                                    {% if current_user.can('delete') %}
+                                    <button type="button" class="btn btn-danger"
+                                        data-url="{{ url_for('book.delete', book_id=book.id) }}" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal" data-title="{{ book.name }}">
+                                        Удалить
+                                    </button>
+                                    {% endif %}
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-5">
+                    {{ render_pagination(pagination, request.endpoint, search_params) }}
+                </div>
+                {% endif %}
+                {% if not flag %}
+                <h3 class="title my-3 font-weight-bold text-center">Ничего не найдено</h3>
+                {% endif %}
+                {% if current_user.is_authenticated and current_user.can('create') %}
+                    <div class="text-center my-3">
+                        <a class="btn btn-lg btn-dark" href="{{ url_for('book.new') }}">Добавить книгу</a>
+                    </div>
+                {% endif %}
+
+                {% if current_user.is_authenticated %}
+                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Удаление книги</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Вы уверены, что хотите удалить книгу "<span class="delete-title"></span>"?
+                                <form action="" method="POST">
+                                    <input type="submit" id="submit-delete" class="d-none">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                <label for="submit-delete" class="btn btn-danger mb-0">Удалить</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="{{ url_for('static', filename='main.js')}}"></script>
+{% endblock %}

@@ -1,0 +1,87 @@
+:root {
+    --primary-color: #2c3e50; /* Мокрый асфальт */
+    --secondary-color: #ecf0f1; /* Облака */
+    --accent-color: #3498db; /* Ярко-синий */
+    --text-color: #2c3e50; /* Мокрый асфальт */
+    --footer-background: #233140; /* Темно-синий асфальт */
+    --dark-grey: #29323b;
+}
+
+body {
+    margin-top: 50px;
+    font-family: 'Open Sans', sans-serif;
+    color: var(--text-color);
+    background-color: var(--secondary-color);
+}
+
+.navbar {
+    background-color: var(--primary-color);
+}
+
+.nav-link,
+.navbar-brand {
+    color: var(--secondary-color);
+}
+
+.navbar-toggler {
+    border-color: var(--secondary-color);
+}
+
+footer {
+    background-color: var(--footer-background);
+    color: var(--secondary-color);
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary-color);
+}
+
+input[type='text'],
+input[type='email'],
+input[type['password'],
+textarea,
+select {
+    border: 1px solid var(--primary-color);
+}
+
+.bg-light {
+    background-color: var(--secondary-color) !important;
+}
+
+.text-dark {
+    color: var(--text-color) !important;
+}
+
+.bg-dark {
+    background-color: var(--footer-background) !important;
+}
+
+.text-white {
+    color: var(--secondary-color) !important;
+}
+.main-content {
+    display: flex;
+    padding: 20px;
+}
+.search-form {
+    flex: 1;
+    max-width: 300px;
+    margin-right: 20px;
+}
+.book-list {
+    flex: 3;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+select>option {
+    background-color: #b8e1ba;
+}

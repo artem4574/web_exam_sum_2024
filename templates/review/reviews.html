@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if reviews %}
+{% for review in reviews %}
+
+<div class="d-flex flex-column mt-2 border">
+    <div class="d-flex">
+        <div class="flex-grow-1 ms-3 col-10">
+            <h5>{{ review.get_full_user_name() }}: Оценка {{ review.rating }}</h5>
+            <p><span>{{ review.text | safe }}</span></p>
+            <h6>
+                {% if review.status == 1 %}
+                    На рассмотрении
+                {% endif %}
+
+                {% if review.status == 2 %}
+                    Одобрена
+                {% endif %}
+
+                {% if review.status == 3 %}
+                    Отклонена
+                {% endif %}
+            </h6>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+{% endif %}
+
+{% endblock %}
